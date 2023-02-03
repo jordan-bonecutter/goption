@@ -130,3 +130,20 @@ func TestApply(t *testing.T) {
     t.Errorf("Expected empty optional")
   }
 }
+
+func TestDo(t *testing.T) {
+  val := Do(func() int {
+    return 1
+  })
+  if val.Unwrap() != 1 {
+    t.Errorf("Expected 1, got %v", val)
+  }
+
+  val = Do(func() int {
+    var a *int
+    return *a
+  })
+  if val.Ok() {
+    t.Errorf("Expected empty optional, got %v", val)
+  }
+}

@@ -80,3 +80,17 @@ func Apply[In, Out any](in Option[In], f func(In) Out) Option[Out] {
   return Some(f(in.t))
 }
 
+// Do runs the function f which may panic.
+// If f does not panic Some(f()) is returned.
+// Otherwise none is returned.
+func Do[T any](f func() T) (o Option[T]) {
+  defer func() {
+    if r := recover(); r != nil {
+      o = None[T]()
+    }
+  }()
+
+  o = Some(f())
+  return
+}
+
