@@ -2,4 +2,4 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/jordan-bonecutter/goption.svg)](https://pkg.go.dev/github.com/jordan-bonecutter/goption)
 
 # goption
-Optional values for Go
+Optional values for Go. Inspired by the Rust implementation.
