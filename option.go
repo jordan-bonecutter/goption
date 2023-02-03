@@ -72,11 +72,7 @@ func (o Option[T]) UnwrapOr(def T) T {
 // value for T.
 func (o Option[T]) UnwrapOrDefault() T {
   var def T
-  if !o.ok {
-    return def
-  }
-
-  return o.t
+  return o.UnwrapOr(def)
 }
 
 // Ok returns if the optional is present.
