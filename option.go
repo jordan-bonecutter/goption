@@ -6,7 +6,7 @@ type Option[T any] struct {
   ok bool
 }
 
-// Unwrap forcefull unwraps the Optional value.
+// Unwrap forcefully unwraps the Optional value.
 // If the optional is not ok this function will panic.
 func (o Option[T]) Unwrap() T {
   return o.Expect("Unwrapped empty optional")
