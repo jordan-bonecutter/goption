@@ -150,3 +150,16 @@ func TestDo(t *testing.T) {
     t.Errorf("Expected empty optional, got %v", val)
   }
 }
+
+func TestRef(t *testing.T) {
+  myOption := Some[int](3)
+  ref := myOption.UnwrapRef()
+  if *ref != 3 {
+    t.Errorf("Failed unwrapping option ref, expected 3 but got %d", *ref)
+  }
+
+  *ref = 4
+  if unwrapped := myOption.Unwrap(); unwrapped != 4 {
+    t.Errorf("Failed unwrapping option ref, expected 4 but got %d", unwrapped)
+  }
+}
