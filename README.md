@@ -21,13 +21,19 @@ If there are any more interfaces which should be wrapped, please open an issue o
 ## Examples
 
 ### Basic
-To declare an optional value do:
+To declare a present optional value do:
 
 ```go
 myOption := Some[int](3)
 ```
 
-To check if an optional value is present, do:
+To declare an empty optional value do:
+
+```go
+empty := None[int]()
+```
+
+To check if an optional value is present do:
 
 ```go
 opt := functionReturningOption()
