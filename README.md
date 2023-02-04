@@ -20,6 +20,7 @@ If there are any more interfaces which should be wrapped, please open an issue o
 
 ## Examples
 
+### Basic
 To declare an optional value do:
 
 ```go
@@ -35,6 +36,7 @@ if opt.Ok() {
 }
 ```
 
+### sql
 To move values in and out of a sql database do:
 
 ```go
@@ -49,5 +51,18 @@ for rows.Next() {
   var opt Option[int]
   rows.Scan(&opt)
   fmt.Println(opt)
+}
+```
+
+### json
+```
+type MyStruct struct {
+  Foo Option[int]
+}
+
+var v MyStruct
+json.Unmarshal([]byte(`{}`), &v)
+if v.Foo.Ok() {
+  fmt.Println(v.Foo.Unwrap())
 }
 ```
