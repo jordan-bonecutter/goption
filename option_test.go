@@ -29,12 +29,14 @@ func TestUnwrapRefFail(t *testing.T) {
       t.Errorf("Expected to fail unwrapping empty optional")
     }
   }()
-  None[struct{}]().UnwrapRef()
+  opt := None[struct{}]()
+  opt.UnwrapRef()
 }
 
 // TestUnwrapFail tests that unwrapping a ref on some succeeds.
 func TestUnwrapRefSuccess(t *testing.T) {
-  val := Some(3).UnwrapRef()
+  opt := Some(3)
+  val := opt.UnwrapRef()
   if *val != 3 {
     t.Errorf("Failed unwrapping value, expected 3 but got %v", val)
   }
@@ -60,7 +62,8 @@ func TestExpectMessage(t *testing.T) {
 
 // TestExpectMessage tests that the custom panic message delivers on expect ref.
 func TestExpectRefMessage(t *testing.T) {
-  val := Some(3).ExpectRef("not my custom message")
+  opt := Some(3)
+  val := opt.ExpectRef("not my custom message")
   if *val != 3 {
     t.Errorf("Failed expecting int: %v", *val)
   }

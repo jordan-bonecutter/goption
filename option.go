@@ -13,7 +13,7 @@ func (o Option[T]) Unwrap() T {
 }
 
 // UnwrapRef returns a reference to the underlying T.
-func (o Option[T]) UnwrapRef() *T {
+func (o *Option[T]) UnwrapRef() *T {
   return o.ExpectRef("Unwrapped empty optional")
 }
 
@@ -27,7 +27,7 @@ func (o Option[T]) Expect(msg string) T {
 }
 
 // ExpectRef unwraps o and panics with msg if it's empty.
-func (o Option[T]) ExpectRef(msg string) *T {
+func (o *Option[T]) ExpectRef(msg string) *T {
   if !o.ok {
     panic(msg)
   }

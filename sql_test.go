@@ -10,11 +10,11 @@ import (
 )
 
 func TestSQLScanner(t *testing.T) {
-  eDB := epg.NewDatabase(epg.DefaultConfig().Username("test").Password("test").Database("test"))
+  eDB := epg.NewDatabase(epg.DefaultConfig().Username("test").Password("test").Database("test").Port(2345))
   eDB.Start()
   t.Cleanup(func() { eDB.Stop() })
 
-  db, err := sql.Open("postgres", "host=127.0.0.1 port=5432 user=test password=test dbname=test sslmode=disable")
+  db, err := sql.Open("postgres", "host=127.0.0.1 port=2345 user=test password=test dbname=test sslmode=disable")
   if err != nil {
     t.Fatalf("Failed connecting to database: %s", err.Error())
   }
