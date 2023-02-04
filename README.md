@@ -61,7 +61,7 @@ for rows.Next() {
 ```
 
 ### json
-```
+```go
 type MyStruct struct {
   Foo Option[int]
 }
