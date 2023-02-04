@@ -7,6 +7,9 @@ Optional values for Go. Inspired by the Rust implementation.
 ## Why?
 I created this out of frustration for the incoherency of optional handling across the language. In sql, we use `NullType`, in json and encoding friends we use pointers, and elsewhere we use `ok`. This package adds a more coherent optional experience across the language and is well tested.
 
+
+## Examples
+
 To declare an optional value do:
 
 ```go
