@@ -16,7 +16,7 @@ Attempts to follow a monadic design where if the wrapped type `T` implements som
 - `sql.Scanner`
 - `sql.driver.Valuer`
 
-If there are any more interfaces which should be wrapped, please open an issue or a PR.
+If there are any more interfaces which should be wrapped, please open an issue or a PR. All features must be tested.
 
 ## Examples
 
