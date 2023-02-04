@@ -2,6 +2,7 @@ package goption
 
 import (
   "database/sql"
+  "database/sql/driver"
   "testing"
   "time"
 
@@ -31,15 +32,21 @@ func TestSQLScanner(t *testing.T) {
     t.Fatalf("Failed creating test table: %s", err.Error())
   }
 
+  var testImplementsValuer any = Some[int](0)
+  if _, isValuer := testImplementsValuer.(driver.Valuer); !isValuer {
+    t.Errorf("Not a valuer")
+  }
+
+  now := time.Now()
   if _, err := db.Exec(`INSERT INTO test(
     key,
     maybe_empty,
     ts
   ) VALUES (
     0,
-    123,
-    '2023-02-03 00:31:00'
-  );`); err != nil {
+    $1,
+    $2
+  );`, Some[int](123), Some[time.Time](now)); err != nil {
     t.Fatalf("Failed inserting test data: %s", err.Error())
   }
 
@@ -49,9 +56,9 @@ func TestSQLScanner(t *testing.T) {
     ts
   ) VALUES (
     1,
-    NULL,
-    NULL
-  );`); err != nil {
+    $1,
+    $2
+  );`, None[int](), None[time.Time]()); err != nil {
     t.Fatalf("Failed inserting test data: %s", err.Error())
   }
 
@@ -75,7 +82,7 @@ func TestSQLScanner(t *testing.T) {
       if i.Unwrap() != 123 {
         t.Errorf("Unexpected value: %v", i.Unwrap())
       }
-      if tstr := ts.Unwrap().Format("2006-01-02 15:04:05"); tstr != "2023-02-03 00:31:00" {
+      if tstr := ts.Unwrap().Format("2006-01-02 15:04:05"); tstr != now.Format("2006-01-02 15:04:05") {
         t.Errorf("Bad time staring: %s", tstr)
       }
     case 1:
