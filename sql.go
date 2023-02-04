@@ -6,13 +6,7 @@ import (
   "fmt"
   "reflect"
   "time"
-  "unsafe"
 )
-
-type exportOption[T any] struct {
-  Val T
-  Ok bool
-}
 
 // Scan implements sql.Scanner for Options
 func (o *Option[T]) Scan(src any) error {
@@ -31,9 +25,8 @@ func (o *Option[T]) Scan(src any) error {
   // Try reflecting
   srcVal := reflect.ValueOf(src)
   tType := reflect.TypeOf(o.t)
-  exportPtr := (*exportOption[T])(unsafe.Pointer(o))
   if srcVal.CanConvert(tType) {
-    reflect.ValueOf(exportPtr).Elem().Field(0).Set(srcVal.Convert(tType))
+    reflect.ValueOf(&o.t).Elem().Set(srcVal.Convert(tType))
     o.ok = true
     return nil
   }
