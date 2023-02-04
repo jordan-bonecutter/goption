@@ -10,15 +10,12 @@ func (o Option[T]) String() string {
     return "null"
   }
 
-  return tryStringer(o.t)
-}
-
-func tryStringer(v any) string {
-  if stringer, isStringer := v.(fmt.Stringer); isStringer {
+  var maybeStringer any = o.t
+  if stringer, isStringer := maybeStringer.(fmt.Stringer); isStringer {
     return stringer.String()
   }
 
-  return fmt.Sprintf("%v", v)
+  return fmt.Sprintf("%v", o.t)
 }
 
 // GoString implements fmt.GoStringer
@@ -27,13 +24,10 @@ func (o Option[T]) GoString() string {
     return fmt.Sprintf("Option[%T]{ok: false}", o.t)
   }
 
-  return tryGoStringer(o.t)
-}
-
-func tryGoStringer(v any) string {
-  if stringer, isStringer := v.(fmt.GoStringer); isStringer {
+  var maybeGoStringer any = o.t
+  if stringer, isStringer := maybeGoStringer.(fmt.GoStringer); isStringer {
     return stringer.GoString()
   }
 
-  return fmt.Sprintf("%#v", v)
+  return fmt.Sprintf("%#v", o.t)
 }
