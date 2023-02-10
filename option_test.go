@@ -163,3 +163,22 @@ func TestRef(t *testing.T) {
     t.Errorf("Failed unwrapping option ref, expected 4 but got %d", unwrapped)
   }
 }
+
+func TestFromRef(t *testing.T) {
+  empty := FromRef((*int)(nil))
+  if empty.Ok() {
+    t.Errorf("FromRef must be empty for nil")
+  }
+
+  val := 10
+  ptr := &val
+  myOption := FromRef(ptr)
+
+  if !myOption.Ok() {
+    t.Errorf("FromRef must be present for non-nil value")
+  }
+
+  if unwrapped := myOption.Unwrap(); unwrapped != 10 {
+    t.Errorf("FromRef must contain dereferenced value, expected 10 but got %d", unwrapped)
+  }
+}
