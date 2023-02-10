@@ -71,6 +71,15 @@ func None[T any]() Option[T] {
   }
 }
 
+// FromRef returns an Option whose underlying value is present if t is not nil.
+// Otherwise, it returns an empty optional value.
+func FromRef[T any](t *T) Option[T] {
+  if t == nil {
+    return None[T]()
+  }
+  return Some(*t)
+}
+
 // Apply f to the optional value.
 func Apply[In, Out any](in Option[In], f func(In) Out) Option[Out] {
   if !in.ok {
