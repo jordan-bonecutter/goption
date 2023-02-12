@@ -56,6 +56,11 @@ func (o Option[T]) Ok() bool {
 	return o.ok
 }
 
+// Get returns the underlying value and a boolean indicating if it's present.
+func (o Option[T]) Get() (T, bool) {
+	return o.t, o.ok
+}
+
 // Some returns an Option whose underlying value is present.
 func Some[T any](t T) Option[T] {
 	return Option[T]{
