@@ -4,7 +4,7 @@ on: push
 
 jobs:
   run-tests:
-    name: Test Code
+    name: Test and Format Code
     runs-on: ubuntu-latest
 
     steps:
@@ -14,5 +14,14 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v2
       
+      - name: Format Go Code
+        run: gofmt -s -w .
+
       - name: Run Go Test
         run: go test .
+
+      - name: Commit linter changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_user_name: LinterBot
+          commit_message: Linter found style changes
