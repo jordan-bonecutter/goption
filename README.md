@@ -33,6 +33,15 @@ To declare an empty optional value do:
 empty := None[int]()
 ```
 
+The default value for an `Option[T]` is `None[T]()`:
+
+```go
+var maybeInt Option[int]
+if !maybeInt.Ok() {
+  fmt.Println("The value isn't present!") // This will print, maybeInt hasn't been set.
+}
+```
+
 To check if an optional value is present do:
 
 ```go
@@ -46,7 +55,7 @@ To convert a pointer into an optional value do:
 
 ```go
 var pointer *int
-myOption := FromRef(pointer) // empty, if pointer is nil
+myOption := FromRef(pointer) // Empty for nil pointers
 ```
 
 ### sql
