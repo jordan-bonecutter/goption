@@ -15,7 +15,7 @@ jobs:
         uses: actions/setup-go@v2
 
       - name: Run go fmt
-        run: go fmt -s -w .
+        run: go fmt .
       
       - name: Run Go Test
         run: go test .
