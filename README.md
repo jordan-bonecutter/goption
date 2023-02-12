@@ -33,13 +33,6 @@ To declare an empty optional value do:
 empty := None[int]()
 ```
 
-To convert pointer into optional value do:
-
-```go
-var pointer *int
-myOption := FromRef(pointer) // empty, if pointer is nil
-```
-
 To check if an optional value is present do:
 
 ```go
@@ -47,6 +40,13 @@ opt := functionReturningOption()
 if opt.Ok() {
   fmt.Println(opt.Unwrap())
 }
+```
+
+To convert a pointer into an optional value do:
+
+```go
+var pointer *int
+myOption := FromRef(pointer) // empty, if pointer is nil
 ```
 
 ### sql
