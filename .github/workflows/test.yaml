@@ -13,6 +13,9 @@ jobs:
 
       - name: Setup Go
         uses: actions/setup-go@v2
+
+      - name: Run gofmt
+        run: gofmt -s -w .
       
       - name: Run Go Test
         run: go test .
