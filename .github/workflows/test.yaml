@@ -19,3 +19,9 @@ jobs:
       
       - name: Run Go Test
         run: go test .
+
+      - name: Commit style changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_user_name: ActionBot
+          commit_message: Found style changes
