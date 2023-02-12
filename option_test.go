@@ -117,6 +117,21 @@ func TestOk(t *testing.T) {
 	}
 }
 
+func TestGet(t *testing.T) {
+	val, ok := Some(3).Get()
+	if !ok {
+		t.Error("Failed unwrapping value")
+	}
+	if val != 3 {
+		t.Errorf("Failed unwrapping value, expected 3 but got %v", val)
+	}
+
+	_, ok = None[int]().Get()
+	if ok {
+		t.Error("Expected empty optional")
+	}
+}
+
 // TestApply tests Applying a function on an optional.
 func TestApply(t *testing.T) {
 	square := func(v float64) float64 {
