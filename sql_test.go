@@ -66,7 +66,6 @@ func TestSQLScanner(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed selecting test data: %s", err.Error())
 	}
-	defer rows.Close()
 
 	for rows.Next() {
 		var i Option[int]
@@ -94,4 +93,67 @@ func TestSQLScanner(t *testing.T) {
 			}
 		}
 	}
+  rows.Close()
+
+	if _, err := db.Exec(`CREATE TABLE test2(
+    key integer not null,
+    maybe_empty integer
+  );`); err != nil {
+		t.Fatalf("Failed creating test table: %s", err.Error())
+	}
+
+  if _, err := db.Exec(`INSERT INTO test2(
+    key, maybe_empty
+  ) VALUES (
+    $1, $2
+  );`, 0, Some(dummyValuer{})); err != nil {
+    t.Errorf("Failed inserting dummy valuer: %s", err.Error())
+  }
+
+  if _, err := db.Exec(`INSERT INTO test2(
+    key, maybe_empty
+  ) VALUES (
+    $1, $2
+  );`, 1, None[dummyValuer]()); err != nil {
+    t.Errorf("Failed inserting empty dummy valuer: %s", err.Error())
+  }
+
+  rows, err = db.Query(`SELECT * FROM test2 ORDER BY key ASC`)
+  if err != nil {
+    t.Fatalf("Failed selecting from test2: %s", err.Error())
+  }
+
+  for rows.Next() {
+    var scanner Option[int]
+    var key int
+    if err := rows.Scan(&key, &scanner); err != nil {
+      t.Errorf("Failed scanning row: %s", err.Error())
+    }
+
+    switch key {
+    case 0:
+      if !scanner.Ok() {
+        t.Errorf("Expected value to be present")
+      } else if val := scanner.Unwrap(); val != 271 {
+        t.Errorf("Expected 217 but got %d", val)
+      }
+    case 1:
+      if scanner.Ok() {
+        t.Errorf("Expected value to be empty")
+      }
+    }
+  }
+}
+
+// dummyValuer implements sql.driver.Valuer
+type dummyValuer struct {}
+
+func (dummyValuer) Value() (driver.Value, error) {
+  return int64(271), nil
+}
+
+func TestDummyImplementsDriverValuer(t *testing.T) {
+  var valuer driver.Valuer
+  valuer = dummyValuer{}
+  func(any){}(valuer)
 }
