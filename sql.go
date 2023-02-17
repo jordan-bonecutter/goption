@@ -3,7 +3,6 @@ package goption
 import (
 	"database/sql"
 	"database/sql/driver"
-	"fmt"
 	"reflect"
 	"time"
 )
@@ -78,13 +77,5 @@ func (o Option[T]) Value() (driver.Value, error) {
 		return tVal.Convert(timeType).Interface(), nil
 	}
 
-	return nil, fmt.Errorf("%w: %T", ErrNotAValue, o.t)
+  return o.t, nil
 }
-
-type errNotAValue struct{}
-
-func (errNotAValue) Error() string {
-	return "Not a value"
-}
-
-var ErrNotAValue errNotAValue
