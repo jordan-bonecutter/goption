@@ -77,5 +77,5 @@ func (o Option[T]) Value() (driver.Value, error) {
 		return tVal.Convert(timeType).Interface(), nil
 	}
 
-  return o.t, nil
+	return o.t, nil
 }
