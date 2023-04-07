@@ -6,6 +6,11 @@ import (
 
 // MarshalText marshals the underlying option data
 func (o Option[T]) MarshalText() ([]byte, error) {
+	var maybeMarshaler any = o.t
+	if valuer, isMarshaler := maybeMarshaler.(encoding.TextMarshaler); isMarshaler {
+		return valuer.MarshalText()
+	}
+
 	return o.MarshalJSON()
 }
 
