@@ -51,6 +51,21 @@ func (o Option[T]) UnwrapOrDefault() T {
 	return o.UnwrapOr(def)
 }
 
+// UnwrapRefOr returns a reference if optional is present, otherwise it returns default.
+func (o *Option[T]) UnwrapRefOr(def *T) *T {
+	if !o.ok {
+		return def
+	}
+
+	return &o.t
+}
+
+// UnwrapRefOrNil returns a reference if optional is present, otherwise it returns nil.
+func (o *Option[T]) UnwrapRefOrNil() *T {
+	var def *T
+	return o.UnwrapRefOr(def)
+}
+
 // Ok returns if the optional is present.
 func (o Option[T]) Ok() bool {
 	return o.ok

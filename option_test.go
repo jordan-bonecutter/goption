@@ -197,3 +197,39 @@ func TestFromRef(t *testing.T) {
 		t.Errorf("FromRef must contain dereferenced value, expected 10 but got %d", unwrapped)
 	}
 }
+
+// TestUnwrapRefOr tests that or values are returned when unwrap or-ing none.
+// Otherwise it expects the underlying optional value.
+func TestUnwrapRefOr(t *testing.T) {
+	opt := None[int]()
+	def := 10
+
+	val := opt.UnwrapRefOr(&def)
+	if *val != 10 {
+		t.Errorf("Failed unwrapping optional: %v", val)
+	}
+
+	opt = Some(4)
+	val = opt.UnwrapRefOr(&def)
+	if *val != 4 {
+		t.Errorf("Failed unwrapping optional: %v", val)
+	}
+}
+
+// TestUnwrapRefOrNil tests that default values are returned when unwrap or-ing none.
+// Otherwise it expects the underlying optional value.
+func TestUnwrapRefOrNil(t *testing.T) {
+	opt := None[struct{ FooBar int }]()
+
+	val := opt.UnwrapRefOrNil()
+	if val != nil {
+		t.Errorf("Expected default value of FooBar, got %v", val)
+	}
+
+	opt = Some[struct{ FooBar int }](struct{ FooBar int }{FooBar: 11})
+
+	val = opt.UnwrapRefOrNil()
+	if val.FooBar != 11 {
+		t.Errorf("Failed unwrapping: %v", val)
+	}
+}
