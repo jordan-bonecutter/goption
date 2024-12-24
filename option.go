@@ -1,5 +1,7 @@
 package goption
 
+import "iter"
+
 // Option represents a value whose presence is optional.
 type Option[T any] struct {
 	t  T
@@ -121,4 +123,27 @@ func Do[T any](f func() T) (o Option[T]) {
 
 	o = Some(f())
 	return
+}
+
+// With allows you to use the optional value in it's own scope.
+// For example:
+//
+// opt := Some(3)
+// for value := opt.With() {
+//   fmt.Println(value)
+// }
+//
+// This is a hack on the iter.Seq interface.
+func (o *Option[T]) With() iter.Seq[T] {
+	return func(yield func(T) bool) {
+		if o.ok {
+			yield(o.t)
+		}
+	}
+}
+
+// IsZero returns true if o is not present.
+// This is for use with encoding/json in go1.24+.
+func (o *Option[T]) IsZero() bool {
+	return !o.ok
 }
