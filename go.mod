@@ -1,6 +1,6 @@
 module github.com/jordan-bonecutter/goption
 
-go 1.19
+go 1.23
 
 require (
 	github.com/fergusstrange/embedded-postgres v1.20.0

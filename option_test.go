@@ -233,3 +233,59 @@ func TestUnwrapRefOrNil(t *testing.T) {
 		t.Errorf("Failed unwrapping: %v", val)
 	}
 }
+
+func TestWithSome(t *testing.T) {
+	opt := Some(3)
+	ranFor := 0
+	for range opt.With() {
+		ranFor++
+	}
+	if ranFor != 1 {
+		t.Fatalf("Expected to run the loop once, ran %d times", ranFor)
+	}
+}
+
+func TestWithNone(t *testing.T) {
+	opt := None[int]()
+	ranFor := 0
+	for range opt.With() {
+		ranFor++
+	}
+	if ranFor != 0 {
+		t.Fatalf("Expected not to run the loop, ran %d times", ranFor)
+	}
+}
+
+func TestIsZeroSome(t *testing.T) {
+	opt := Some(1)
+	if opt.IsZero() {
+		t.Fatalf("Expected to not be zero")
+	}
+}
+
+func TestIsZeroNone(t *testing.T) {
+	opt := None[int]()
+	if opt.IsZero() {
+		t.Fatalf("Expected to not be zero")
+	}
+}
+
+type fooZeroer bool
+
+func (f fooZeroer) IsZero() bool {
+	return bool(f)
+}
+
+func TestIsZeroWrappedZero(t *testing.T) {
+	opt := Some(fooZeroer(true))
+	if !opt.IsZero() {
+		t.Fatalf("Expected to be zero")
+	}
+}
+
+func TestIsZeroWrappedNotZero(t *testing.T) {
+	opt := Some(fooZeroer(false))
+	if opt.IsZero() {
+		t.Fatalf("Expected not to be zero")
+	}
+}

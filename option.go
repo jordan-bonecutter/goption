@@ -129,9 +129,10 @@ func Do[T any](f func() T) (o Option[T]) {
 // For example:
 //
 // opt := Some(3)
-// for value := opt.With() {
-//   fmt.Println(value)
-// }
+//
+//	for range value := opt.With() {
+//	  fmt.Println(value)
+//	}
 //
 // This is a hack on the iter.Seq interface.
 func (o *Option[T]) With() iter.Seq[T] {
@@ -145,5 +146,10 @@ func (o *Option[T]) With() iter.Seq[T] {
 // IsZero returns true if o is not present.
 // This is for use with encoding/json in go1.24+.
 func (o *Option[T]) IsZero() bool {
-	return !o.ok
+	if o.ok {
+		if isZeroer, wrapsIsZeroer := (any(o.t)).(interface{ IsZero() bool }); wrapsIsZeroer {
+			return isZeroer.IsZero()
+		}
+	}
+	return false
 }
