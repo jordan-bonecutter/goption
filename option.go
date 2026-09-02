@@ -73,6 +73,18 @@ func (o Option[T]) Ok() bool {
 	return o.ok
 }
 
+// OkAnd returns true if the optional is present and the predicate returns
+// true on the underlying value.
+func (o Option[T]) OkAnd(predicate func(T) bool) bool {
+	return o.ok && predicate(o.t)
+}
+
+// NotOkOr returns true if the optional is not present of the predicate returns
+// true on the underlying value.
+func (o Option[T]) NotOkOr(predicate func(T) bool) bool {
+	return !o.ok || predicate(o.t)
+}
+
 // Get returns the underlying value and a boolean indicating if it's present.
 func (o Option[T]) Get() (T, bool) {
 	return o.t, o.ok
@@ -102,13 +114,29 @@ func FromRef[T any](t *T) Option[T] {
 	return Some(*t)
 }
 
-// Apply f to the optional value.
-func Apply[In, Out any](in Option[In], f func(In) Out) Option[Out] {
-	if !in.ok {
-		return None[Out]()
+// Map returns an option whose underlying value is the result of calling f on
+// the underlying value of o if o is not nil and nil otherwise.
+func (o Option[T]) Map[U any](f func(T) U) Option[U] {
+	if o.ok {
+		return Some(f(o.t))
 	}
 
-	return Some(f(in.t))
+	return None[U]()
+}
+
+func (o Option[T]) AndThen[U any](f func(T) Option[U]) Option[U] {
+	if o.ok {
+		return f(o.t)
+	}
+
+	return None[U]()
+}
+
+// Apply f to the optional value.
+//
+// Deprecated: use .Map instead.
+func Apply[In, Out any](in Option[In], f func(In) Out) Option[Out] {
+	return in.Map(f)
 }
 
 // Do runs the function f which may panic.
